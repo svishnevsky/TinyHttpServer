@@ -80,6 +80,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\TinyHttpServer.Core.WinPhone\TinyHttpServer.Core.WinPhone.csproj">
+      <Project>{C6269B11-A92A-4ECE-878E-E9DAC182424D}</Project>
+      <Name>TinyHttpServer.Core.WinPhone</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TinyHttpServer.Core\TinyHttpServer.Core.csproj">
       <Project>{0923aedc-2daa-4c31-8eea-334d623daf8f}</Project>
       <Name>TinyHttpServer.Core</Name>

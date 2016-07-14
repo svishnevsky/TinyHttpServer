@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace TinyHttpServer.Core
+﻿namespace TinyHttpServer.Core
 {
+    using System.Threading.Tasks;
+
     public class HttpServer
     {
         private readonly IRequestReader requestReader;
@@ -11,6 +11,11 @@ namespace TinyHttpServer.Core
         private readonly IHttpHandler httpHandler;
 
         private readonly IListener listener;
+
+        public HttpServer(IListener listener) : this(new RequestReader(), new HttpHandler(), new ResponseWriter(), listener)
+        {
+            
+        }
 
         public HttpServer(IRequestReader requestReader, IHttpHandler httpHandler, IResponseWriter responseWriter, IListener listener)
         {

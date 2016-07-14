@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TinyHttpServer.Core
+﻿namespace TinyHttpServer.Core
 {
     public class HttpRequest
     {
@@ -10,7 +8,7 @@ namespace TinyHttpServer.Core
 
         public byte[] Body { get; set; }
 
-        public Uri Uri { get; set; }
+        public RelativePath RelativePath { get; set; }
 
         public HttpHeaders Headers { get; set; }
 

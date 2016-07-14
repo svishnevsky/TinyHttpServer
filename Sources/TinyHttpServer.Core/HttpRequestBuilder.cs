@@ -1,7 +1,5 @@
 ﻿namespace TinyHttpServer.Core
 {
-    using System;
-
     public class HttpRequestBuilder
     {
         private HttpRequest request;
@@ -25,9 +23,9 @@
             return this;
         }
 
-        public HttpRequestBuilder Uri(Uri uri)
+        public HttpRequestBuilder RelativePath(RelativePath relativePath)
         {
-            request.Uri = uri;
+            request.RelativePath = relativePath;
 
             return this;
         }

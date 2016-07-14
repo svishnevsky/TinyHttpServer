@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
+using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
@@ -38,31 +37,7 @@ namespace TinyHttpServer.Core.WinPhone
                 return;
             }
 
-            var requestData = new List<byte>();
-
-            using (var input = args.Socket.InputStream)
-            {
-                var data = new byte[BufferSize];
-                var buffer = data.AsBuffer();
-                var dataRead = BufferSize;
-                while (dataRead == BufferSize)
-                {
-                    input.ReadAsync(buffer, BufferSize, InputStreamOptions.Partial).GetResults();
-                    requestData.AddRange(data);
-                    dataRead = buffer.Length;
-                }
-            }
-
-            var result = this.OnRequestReceived(requestData.ToArray()).Result;
-
-            using (var output = args.Socket.OutputStream)
-            {
-                using (var resp = output.AsStreamForWrite())
-                {
-                    resp.WriteAsync(result, 0, result.Length);
-                    resp.Flush();
-                }
-            }
+            this.ProccessRequest(args.Socket).Wait();
         }
 
         public void Stop()
@@ -75,6 +50,42 @@ namespace TinyHttpServer.Core.WinPhone
         {
             var streamSocketListener = this.listener;
             streamSocketListener?.Dispose();
+        }
+
+        private async Task ProccessRequest(StreamSocket socket)
+        {
+            var requestData = await this.ReadData(socket);
+
+            var result = await this.OnRequestReceived(requestData);
+
+            using (var output = socket.OutputStream)
+            {
+                using (var resp = output.AsStreamForWrite())
+                {
+                    await resp.WriteAsync(result, 0, result.Length);
+                    await resp.FlushAsync();
+                }
+            }
+        }
+
+        private async Task<byte[]> ReadData(StreamSocket socket)
+        {
+            var requestData = new List<byte>();
+
+            using (var input = socket.InputStream)
+            {
+                var data = new byte[BufferSize];
+                var buffer = data.AsBuffer();
+                var dataRead = BufferSize;
+                while (dataRead == BufferSize)
+                {
+                    await input.ReadAsync(buffer, BufferSize, InputStreamOptions.Partial);
+                    requestData.AddRange(buffer.ToArray());
+                    dataRead = buffer.Length;
+                }
+            }
+
+            return requestData.ToArray();
         }
     }
 }

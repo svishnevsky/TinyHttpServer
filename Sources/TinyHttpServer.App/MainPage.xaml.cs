@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using TinyHttpServer.Core;
+using TinyHttpServer.Core.WinPhone;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -31,7 +32,8 @@ namespace TinyHttpServer.App
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
-//            this.Server = new HttpServer(new RequestReader(), );
+            this.Server = new HttpServer(new RequestReader(), new HttpHandler(), new ResponseWriter(), new Listener(80));
+            this.Server.Start();
         }
 
         /// <summary>

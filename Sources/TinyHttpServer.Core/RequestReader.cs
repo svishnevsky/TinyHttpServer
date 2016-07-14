@@ -36,7 +36,7 @@ namespace TinyHttpServer.Core
                 var builder = new HttpRequestBuilder();
 
                 builder.Method(parts[0]);
-                builder.Uri(new Uri(parts[1]));
+                builder.RelativePath(new RelativePath(parts[1]));
                 builder.Protocol(parts[2]);
 
                 var bodyIndex = requestData.Length - 1;
